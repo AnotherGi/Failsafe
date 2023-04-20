@@ -1,0 +1,47 @@
+[package]
+name = "game"
+version = "0.0.1"
+authors = ["Ahmad Kabani <ahmadkabani@yahoo.com>"]
+edition = "2021"
+
+[features]
+desktop = []
+web = []
+
+[dependencies]
+lazy_static = "1.4.0"
+wasm-bindgen = "0.2.83"
+
+[dependencies.bevy]
+version = "0.9"
+default-features = false
+# Because we ue bevy_kira_audio we cannot use `bevy_audio` and `vorbis`.
+# These are the remaining default features.
+features = [
+  "render",
+  "animation",
+  "bevy_asset",
+  "bevy_scene",
+  "bevy_winit",
+  "bevy_gilrs",
+  "png",
+  "hdr",
+  "filesystem_watcher",
+  "x11"
+]
+
+[dependencies.bevy_asset_loader]
+version = "0.14"
+features = [
+  "2d"
+]
+
+[dependencies.bevy_kira_audio]
+version = "0.13"
+features = [
+  "wav",
+  "flac",
+  "mp3",
+  "ogg"
+]
+
