@@ -77,7 +77,7 @@ struct GameAssets {
     pub(crate) player_one_texture_atlas: Handle<TextureAtlas>,
 
     #[asset(texture_atlas(tile_size_x = 384.0, tile_size_y = 224.0, columns = 15, rows = 43))]
-    #[asset(path = "images/Jerry_Crude_Sprites(p1).png")]
+    #[asset(path = "images/Jerry_Crude_Sprites(p2).png")]
     pub(crate) player_two_texture_atlas: Handle<TextureAtlas>,
 
     #[asset(path = "images/return_key.png")]
