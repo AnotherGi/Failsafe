@@ -2,12 +2,12 @@
 
 use crate::{common::*, CountdownCompleteEvent, GameAssets, GameState, GROUND_Y};
 use bevy::{app::Plugin, prelude::*, sprite::collide_aabb::collide};
-//use bevy_kira_audio::prelude::*;
+use bevy_kira_audio::prelude::*;
 use lazy_static::lazy_static;
 use std::collections::HashMap;
 
 /// Scaling factor for player sprite.
-const PLAYER_SCALE: f32 = 0.5; //2.75
+const PLAYER_SCALE: f32 = 2.75;
 
 /// Starting frame for idle animation.
 const IDLE_FRAME_START: usize = 32;
@@ -31,7 +31,7 @@ const MAX_HEALTH: u8 = 100;
 const ATTACK_FRAMES: [usize; 2] = [4, 2];
 
 /// Animation frame used to determine audio for attack.
-//const ATTACK_AUDIO_FRAMES: [usize; 2] = [3, 3];
+const ATTACK_AUDIO_FRAMES: [usize; 2] = [3, 3];
 
 /// Attack damage of player. Player one has slow powerful attack while player two has quick weaker
 /// attack (based on number of frames of animation).
@@ -41,36 +41,22 @@ lazy_static! {
     /// Frame ranges for player states (min, max).
     static ref FRAMES: [HashMap<State, (usize, usize)>; 2] = {
         let mut p1 = HashMap::new();
-        p1.insert(State::Attacking, (314, 315));
-        //p1.insert(State::HPunch, (0, 5));
-        //p1.insert(State::LKick, (0, 5));
-        //p1.insert(State::HKick, (0, 5));
-        //p1.insert(State::AirLPunch, (0, 5));
-        //p1.insert(State::AirHPunch, (0, 5));
-        //p1.insert(State::AirLKick, (0, 5));
-        //p1.insert(State::AirHKick, (0, 5));
-        p1.insert(State::Dying, (359, 361));
-        p1.insert(State::Falling, (614, 616));
-        p1.insert(State::Idling, (644, 644)); //32, 39
-        p1.insert(State::Jumping, (614, 616));
-        p1.insert(State::Running, (584, 586));
-        p1.insert(State::TakingHit, (509, 510));
+        p1.insert(State::Attacking, (0, 5));
+        p1.insert(State::Dying, (16, 21));
+        p1.insert(State::Falling, (24, 25));
+        p1.insert(State::Idling, (32, 39));
+        p1.insert(State::Jumping, (40, 41));
+        p1.insert(State::Running, (48, 55));
+        p1.insert(State::TakingHit, (64, 67));
 
         let mut p2 = HashMap::new();
-        p2.insert(State::Attacking, (0, 3)); //0, 3
-        //p2.insert(State::HPunch, (0, 5));
-        //p2.insert(State::LKick, (0, 5));
-        //p2.insert(State::HKick, (0, 5));
-        //p2.insert(State::AirLPunch, (0, 5));
-        //p2.insert(State::AirHPunch, (0, 5));
-        //p2.insert(State::AirLKick, (0, 5));
-        //p2.insert(State::AirHKick, (0, 5));
-        p2.insert(State::Dying, (16, 22)); //16, 22
-        p2.insert(State::Falling, (24, 25)); //24, 25
-        p2.insert(State::Idling, (32, 35)); //32, 35
-        p2.insert(State::Jumping, (40, 41)); //40, 41
-        p2.insert(State::Running, (48, 55)); //48, 55
-        p2.insert(State::TakingHit, (56, 58)); //56, 58
+        p2.insert(State::Attacking, (0, 3));
+        p2.insert(State::Dying, (16, 22));
+        p2.insert(State::Falling, (24, 25));
+        p2.insert(State::Idling, (32, 35));
+        p2.insert(State::Jumping, (40, 41));
+        p2.insert(State::Running, (48, 55));
+        p2.insert(State::TakingHit, (56, 58));
 
         [p1, p2]
     };
@@ -224,8 +210,8 @@ impl HealthUpdateEvent {
 }
 
 /// Setup the players.
-fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
-    //audio.play(assets.in_game_audio.clone()).looped();
+fn setup(mut commands: Commands, assets: Res<GameAssets>, audio: Res<Audio>) {
+    audio.play(assets.in_game_audio.clone()).looped();
 
     let mut entities: Vec<Entity> = Vec::new();
 
@@ -242,10 +228,6 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
             right: KeyCode::D,
             jump: KeyCode::W,
             attack: KeyCode::S,
-            //attack: KeyCode::Down,
-            //attack: KeyCode::Down,
-            //attack: KeyCode::Down,
-            //attack: KeyCode::Down,
         },
         Vec3::new(0.0, 15.0, PLAYER_Z + 0.02),
         Vec3::new(30.0, 55.0, 1.0) * PLAYER_SCALE,
@@ -268,9 +250,6 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
             right: KeyCode::Right,
             jump: KeyCode::Up,
             attack: KeyCode::Down,
-            //attack: KeyCode::Down,
-            //attack: KeyCode::Down,
-            //attack: KeyCode::Down,
         },
         Vec3::new(0.0, 0.0, PLAYER_Z + 0.02),
         Vec3::new(25.0, 58.0, 1.0) * PLAYER_SCALE,
@@ -659,7 +638,7 @@ fn animation_system(
     >,
     mut sprite_query: Query<(&Parent, &mut TextureAtlasSprite)>,
     assets: Res<GameAssets>,
-    //audio: Res<Audio>,
+    audio: Res<Audio>,
 ) {
     for (parent, mut sprite) in &mut sprite_query {
         let (player, current_state, mut animation_timer, mut current_frame) =
@@ -671,7 +650,6 @@ fn animation_system(
             sprite.index = frame;
             current_frame.0 = frame;
 
-/* 
             if sprite.index == ATTACK_AUDIO_FRAMES[player.index()] {
                 match player {
                     Player::One => {
@@ -682,7 +660,6 @@ fn animation_system(
                     }
                 }
             }
-*/
         }
     }
 }

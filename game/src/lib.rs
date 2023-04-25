@@ -36,7 +36,7 @@ pub fn run() {
                 .set(ImagePlugin::default_nearest())
                 .set(WindowPlugin {
                     window: WindowDescriptor {
-                        title: "Approaching Storms".to_string(),
+                        title: "Fighter".to_string(),
                         width: WINDOW_WIDTH,
                         height: WINDOW_HEIGHT,
                         present_mode: PresentMode::AutoNoVsync,
@@ -68,16 +68,16 @@ struct GameAssets {
     #[asset(path = "images/background_composite.png")]
     pub(crate) background_image: Handle<Image>,
 
-    #[asset(texture_atlas(tile_size_x = 118.0, tile_size_y = 128.0, columns = 15, rows = 1))]
+    #[asset(texture_atlas(tile_size_x = 118.0, tile_size_y = 128.0, columns = 6, rows = 1))]
     #[asset(path = "images/shop_anim.png")]
     pub(crate) shop_texture_atlas: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 384.0, tile_size_y = 224.0, columns = 15, rows = 43))]
-    #[asset(path = "images/Jerry_Crude_Sprites(p1).png")]
+    #[asset(texture_atlas(tile_size_x = 200.0, tile_size_y = 200.0, columns = 8, rows = 9))]
+    #[asset(path = "images/player_one.png")]
     pub(crate) player_one_texture_atlas: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 384.0, tile_size_y = 224.0, columns = 15, rows = 43))]
-    #[asset(path = "images/Jerry_Crude_Sprites(p2).png")]
+    #[asset(texture_atlas(tile_size_x = 200.0, tile_size_y = 200.0, columns = 8, rows = 8))]
+    #[asset(path = "images/player_two.png")]
     pub(crate) player_two_texture_atlas: Handle<TextureAtlas>,
 
     #[asset(path = "images/return_key.png")]
