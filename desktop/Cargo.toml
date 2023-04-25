@@ -1,7 +1,6 @@
 [package]
 name = "desktop"
 version = "0.0.1"
-authors = ["Ahmad Kabani <ahmadkabani@yahoo.com>"]
 edition = "2021"
 
 [dependencies]

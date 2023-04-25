@@ -7,7 +7,7 @@ use bevy::{app::Plugin, prelude::*};
 const BG_SCALE: f32 = 3.2;
 
 /// Scaling factor for shop sprite.
-const SHOP_SCALE: f32 = 2.85;
+//const SHOP_SCALE: f32 = 2.85;
 
 /// Ground location along y-axis.
 pub(crate) const GROUND_Y: f32 = -66.0 * BG_SCALE;
@@ -27,9 +27,9 @@ impl Plugin for ScenePlugin {
             // Setup the scene when entering main menu.
             .add_system_set(SystemSet::on_enter(GameState::MainMenu).with_system(setup))
             // Run animation system in all game states.
-            .add_system_set(SystemSet::on_update(GameState::MainMenu).with_system(animation_system))
-            .add_system_set(SystemSet::on_update(GameState::InGame).with_system(animation_system))
-            .add_system_set(SystemSet::on_update(GameState::GameOver).with_system(animation_system))
+            //.add_system_set(SystemSet::on_update(GameState::MainMenu).with_system(animation_system))
+            //.add_system_set(SystemSet::on_update(GameState::InGame).with_system(animation_system))
+            //.add_system_set(SystemSet::on_update(GameState::GameOver).with_system(animation_system))
             // Cleanup resources on leaving game over state.
             .add_system_set(SystemSet::on_exit(GameState::GameOver).with_system(cleanup));
     }
@@ -42,8 +42,8 @@ struct EntityData {
 }
 
 /// Represents the shop sprite.
-#[derive(Component)]
-struct Shop;
+//#[derive(Component)]
+//struct Shop;
 
 /// Setup the scene.
 fn setup(mut commands: Commands, assets: Res<GameAssets>) {
@@ -64,6 +64,7 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) {
             .id(),
     );
 
+/* 
     // Animated shop sprite.
     entities.push(
         commands
@@ -83,10 +84,11 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) {
             )))
             .id(),
     );
-
+*/
     commands.insert_resource(EntityData { entities });
 }
 
+/* 
 /// Animate the shop sprite.
 fn animation_system(
     time: Res<Time>,
@@ -108,7 +110,7 @@ fn animation_system(
         }
     }
 }
-
+*/
 /// Cleanup resources.
 fn cleanup(mut commands: Commands, entity_data: Res<EntityData>) {
     for entity in entity_data.entities.iter() {

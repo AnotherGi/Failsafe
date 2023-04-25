@@ -1,4 +1,4 @@
-//! Gamr Over Menu
+//! Game Over Menu
 
 use crate::{
     menu_background, menu_border, menu_button, menu_button_interaction_system, menu_button_text,

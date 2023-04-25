@@ -1,8 +1,11 @@
 //! Health
 
-use crate::{GameState, HealthUpdateEvent, Player, HEALTH_BAR_Z};
+use crate::{common::*, GameState, HealthUpdateEvent, Player, HEALTH_BAR_Z};
 use bevy::prelude::*;
 use std::collections::HashMap;
+
+// Scaling factor for background sprite.
+const BG_SCALE: f32 = 3.2;
 
 /// Health bar maximum width for 100% health.
 const HEALTH_BAR_MAX_WIDTH: f32 = 400.0;
@@ -102,6 +105,20 @@ fn setup(mut commands: Commands) {
                 })
                 .id(),
         );
+/*
+        // Background sprite.
+        entities.push(
+            commands
+                .spawn(SpriteBundle {
+                    texture: assets.background_image.clone(),
+                    transform: Transform {
+                        translation: HEALTH_BAR_POS[player.index()],
+                        scale: HEALTH_BAR_SIZE + Vec3::new(4.0, 4.0, 0.0),
+                    ..default()
+                })
+                .id(),
+        );
+ */
     }
 
     commands.insert_resource(EntityData { entities });
@@ -144,3 +161,6 @@ fn cleanup(mut commands: Commands, entity_data: Res<EntityData>) {
         commands.entity(*entity).despawn_recursive();
     }
 }
+
+// Scaling factor for shop sprite.
+//const SHOP_SCALE: f32 = 2.85;

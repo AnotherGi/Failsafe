@@ -4,7 +4,7 @@ use crate::{common::*, GameAssets, GameState};
 use bevy::prelude::*;
 
 /// Starting value for countdown timer.
-const COUNTDOWN_TIMER_START: u16 = 30;
+const COUNTDOWN_TIMER_START: u16 = 180;
 
 /// Handles the countdown timer.
 pub struct CountdownTimerPlugin;
