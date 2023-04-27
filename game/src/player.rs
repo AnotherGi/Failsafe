@@ -22,7 +22,7 @@ const JUMP_VELOCITY: f32 = 12.0 * 100.0;
 const HORIZ_VELOCITY: f32 = 5.0 * 100.0;
 
 /// Collider alpha (used for displaying collider for debugging).
-const COLLIDER_ALPHA: f32 = 0.0;
+const COLLIDER_ALPHA: f32 = 0.5;
 
 /// Starting health stat.
 const MAX_HEALTH: u8 = 100;
@@ -241,7 +241,7 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
 
     // Player 1: Adjust player feet (Height=200, y-feet=122 => y-center=100 => y-offset=22).
     let mut pos = Vec3::new(-300.0, GROUND_Y, PLAYER_Z);
-    pos += Vec3::new(0.0, 22.0 * PLAYER_SCALE, 0.01);
+    pos += Vec3::new(0.0, 28.0 * PLAYER_SCALE, 0.01);
     entities.push(spawn_player(
         &mut commands,
         &assets,
@@ -261,11 +261,11 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
             //attack: KeyCode::Down,
             //attack: KeyCode::Down,
         },
-        Vec3::new(0.0, 15.0, PLAYER_Z + 0.02),
-        Vec3::new(30.0, 55.0, 1.0) * PLAYER_SCALE,
+        Vec3::new(-10.0, 0.0, PLAYER_Z + 0.02),
+        Vec3::new(100.0, 250.0, 1.0) * PLAYER_SCALE,
         Color::rgba(1.0, 0.0, 0.0, COLLIDER_ALPHA),
-        Vec3::new(130.0, 35.0, PLAYER_Z + 0.03), //125.0, 35.0 | 145.0, 56.0
-        Vec3::new(70.0, 30.0, 1.0) * PLAYER_SCALE, //75.0, 25.0
+        Vec3::new(35.0, 50.0, PLAYER_Z + 0.03), //125.0, 35.0 | 145.0, 56.0
+        Vec3::new(90.0, 45.0, 1.0) * PLAYER_SCALE, //75.0, 25.0
         Color::rgba(1.0, 1.0, 0.0, COLLIDER_ALPHA),
     ));
 
@@ -290,11 +290,11 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
             //attack: KeyCode::Down,
             //attack: KeyCode::Down,
         },
-        Vec3::new(0.0, 15.0, PLAYER_Z + 0.02),
-        Vec3::new(25.0, 58.0, 1.0) * PLAYER_SCALE,
+        Vec3::new(10.0, 0.0, PLAYER_Z + 0.02),
+        Vec3::new(100.0, 250.0, 1.0) * PLAYER_SCALE,
         Color::rgba(0.0, 1.0, 0.0, COLLIDER_ALPHA),
-        Vec3::new(-130.0, 32.0, PLAYER_Z + 0.03),
-        Vec3::new(70.0, 35.0, 1.0) * PLAYER_SCALE,
+        Vec3::new(-35.0, 50.0, PLAYER_Z + 0.03),
+        Vec3::new(90.0, 45.0, 1.0) * PLAYER_SCALE,
         Color::rgba(1.0, 0.0, 1.0, COLLIDER_ALPHA),
     ));
 
