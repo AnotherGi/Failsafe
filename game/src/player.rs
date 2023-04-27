@@ -250,7 +250,7 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
         Vec3::new(0.0, 15.0, PLAYER_Z + 0.02),
         Vec3::new(30.0, 55.0, 1.0) * PLAYER_SCALE,
         Color::rgba(1.0, 0.0, 0.0, COLLIDER_ALPHA),
-        Vec3::new(125.0, 35.0, PLAYER_Z + 0.03), //125.0, 35.0 | 145.0, 56.0
+        Vec3::new(130.0, 35.0, PLAYER_Z + 0.03), //125.0, 35.0 | 145.0, 56.0
         Vec3::new(70.0, 30.0, 1.0) * PLAYER_SCALE, //75.0, 25.0
         Color::rgba(1.0, 1.0, 0.0, COLLIDER_ALPHA),
     ));
