@@ -42,35 +42,37 @@ lazy_static! {
     static ref FRAMES: [HashMap<State, (usize, usize)>; 2] = {
         let mut p1 = HashMap::new();
         p1.insert(State::Attacking, (0, 4));
-        //p1.insert(State::HPunch, (0, 5));
-        //p1.insert(State::LKick, (0, 5));
-        //p1.insert(State::HKick, (0, 5));
-        //p1.insert(State::AirLPunch, (0, 5));
-        //p1.insert(State::AirHPunch, (0, 5));
-        //p1.insert(State::AirLKick, (0, 5));
-        //p1.insert(State::AirHKick, (0, 5));
         p1.insert(State::Dying, (6, 10));
-        p1.insert(State::Falling, (24, 25));
+        p1.insert(State::Falling, (25, 26));
         p1.insert(State::Idling, (32, 34)); //32, 39 //36, 40
-        p1.insert(State::Jumping, (30, 31));
+        p1.insert(State::Jumping, (25, 26));
         p1.insert(State::Running, (18, 23));
         p1.insert(State::TakingHit, (12, 14));
+        p1.insert(State::LPunching, (0, 4));
+        p1.insert(State::HPunching, (0, 4));
+        p1.insert(State::LKicking, (0, 4));
+        p1.insert(State::HKicking, (0, 4));
+        //p1.insert(State::AirLPunching, (0, 5));
+        //p1.insert(State::AirHPunching, (0, 5));
+        //p1.insert(State::AirLKicking, (0, 5));
+        //p1.insert(State::AirHKicking, (0, 5));
 
         let mut p2 = HashMap::new();
         p2.insert(State::Attacking, (0, 4)); //0, 3 //3 frames
-        //p2.insert(State::HPunch, (0, 5));
-        //p2.insert(State::LKick, (0, 5));
-        //p2.insert(State::HKick, (0, 5));
-        //p2.insert(State::AirLPunch, (0, 5));
-        //p2.insert(State::AirHPunch, (0, 5));
-        //p2.insert(State::AirLKick, (0, 5));
-        //p2.insert(State::AirHKick, (0, 5));
         p2.insert(State::Dying, (6, 10)); //16, 22 //12 frames
-        p2.insert(State::Falling, (24, 25)); //24, 25 //2 frames
+        p2.insert(State::Falling, (25, 26)); //24, 25 //2 frames
         p2.insert(State::Idling, (32, 34)); //32, 35 //3 frames
-        p2.insert(State::Jumping, (30, 31)); //40, 41 //2 frames
+        p2.insert(State::Jumping, (25, 26)); //40, 41 //2 frames
         p2.insert(State::Running, (18, 23)); //48, 55 //7 frames
         p2.insert(State::TakingHit, (12, 14)); //56, 58 //2 frames
+        p2.insert(State::LPunching, (0, 4));
+        p2.insert(State::HPunching, (0, 4));
+        p2.insert(State::LKicking, (0, 4));
+        p2.insert(State::HKicking, (0, 4));
+        //p2.insert(State::AirLPunching, (0, 5));
+        //p2.insert(State::AirHPunching, (0, 5));
+        //p2.insert(State::AirLKicking, (0, 5));
+        //p2.insert(State::AirHKicking, (0, 5));
 
         [p1, p2]
     };
@@ -144,6 +146,10 @@ enum State {
     Jumping,
     Running,
     TakingHit,
+    LPunching,
+    HPunching,
+    LKicking,
+    HKicking,
 }
 
 impl Default for State {
@@ -193,6 +199,10 @@ struct Keys {
     right: KeyCode,
     jump: KeyCode,
     attack: KeyCode,
+    lpunch: KeyCode,
+    hpunch: KeyCode,
+    lkick: KeyCode,
+    hkick: KeyCode,
 }
 
 /// Represents the bounding box for testing attack collisions.
@@ -242,6 +252,10 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
             right: KeyCode::D,
             jump: KeyCode::W,
             attack: KeyCode::S,
+            lpunch: KeyCode::R,
+            hpunch: KeyCode::T,
+            lkick: KeyCode::F,
+            hkick: KeyCode::G,
             //attack: KeyCode::Down,
             //attack: KeyCode::Down,
             //attack: KeyCode::Down,
@@ -268,6 +282,10 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
             right: KeyCode::Right,
             jump: KeyCode::Up,
             attack: KeyCode::Down,
+            lpunch: KeyCode::L,
+            hpunch: KeyCode::Semicolon,
+            lkick: KeyCode::Comma,
+            hkick: KeyCode::Period,
             //attack: KeyCode::Down,
             //attack: KeyCode::Down,
             //attack: KeyCode::Down,
@@ -432,6 +450,50 @@ fn game_play_input_system(
                 }
             }
         }
+
+        if keyboard_input.pressed(keys.lpunch) {
+            // If player is either attacking already or taking a hit don't allow an attack.
+            match current_state.0 {
+                State::LPunching | State::TakingHit => (),
+                _ => {
+                    previous_state.set_from_current(&current_state);
+                    current_state.set_state(State::LPunching);
+                }
+            }
+        }
+
+        if keyboard_input.pressed(keys.hpunch) {
+            // If player is either attacking already or taking a hit don't allow an attack.
+            match current_state.0 {
+                State::HPunching | State::TakingHit => (),
+                _ => {
+                    previous_state.set_from_current(&current_state);
+                    current_state.set_state(State::HPunching);
+                }
+            }
+        }
+
+        if keyboard_input.pressed(keys.lkick) {
+            // If player is either attacking already or taking a hit don't allow an attack.
+            match current_state.0 {
+                State::LKicking | State::TakingHit => (),
+                _ => {
+                    previous_state.set_from_current(&current_state);
+                    current_state.set_state(State::LKicking);
+                }
+            }
+        }
+
+        if keyboard_input.pressed(keys.hkick) {
+            // If player is either attacking already or taking a hit don't allow an attack.
+            match current_state.0 {
+                State::HKicking | State::TakingHit => (),
+                _ => {
+                    previous_state.set_from_current(&current_state);
+                    current_state.set_state(State::HKicking);
+                }
+            }
+        }
     }
 }
 
@@ -514,6 +576,13 @@ fn movement_system(
             State::Attacking => {
                 // Let player finish attacking.
                 let max_frame = FRAMES[player.index()].get(&State::Attacking).unwrap().1;
+                if current_frame.0 == max_frame {
+                    current_state.set_from_previous(previous_state);
+                }
+            }
+            State::LPunching => {
+                // Let player finish attacking.
+                let max_frame = FRAMES[player.index()].get(&State::LPunching).unwrap().1;
                 if current_frame.0 == max_frame {
                     current_state.set_from_previous(previous_state);
                 }
@@ -617,6 +686,102 @@ fn collision_system(
 
         match opponent_current_state {
             State::Attacking => {
+                if opponent_current_frame == opponent_attack_frame {
+                    if collide(
+                        opponent_attack_box_pos,
+                        opponent_attack_box_size,
+                        collider_box_pos,
+                        collider_box_size,
+                    )
+                    .is_some()
+                    {
+                        // Switch state to TakingHit.
+                        previous_state.set_state(current_state.0);
+                        current_state.set_state(State::TakingHit);
+
+                        // Just in case damage is not a nice divisior of MAX_HEALTH.
+                        if let Some(h) = health.0.checked_sub(opponent_attack_damage) {
+                            health.0 = h;
+                        } else {
+                            health.0 = 0;
+                        }
+                        health_update_events.send(HealthUpdateEvent::new(*player, health.0));
+                    }
+                }
+            }
+            State::LPunching => {
+                if opponent_current_frame == opponent_attack_frame {
+                    if collide(
+                        opponent_attack_box_pos,
+                        opponent_attack_box_size,
+                        collider_box_pos,
+                        collider_box_size,
+                    )
+                    .is_some()
+                    {
+                        // Switch state to TakingHit.
+                        previous_state.set_state(current_state.0);
+                        current_state.set_state(State::TakingHit);
+
+                        // Just in case damage is not a nice divisior of MAX_HEALTH.
+                        if let Some(h) = health.0.checked_sub(opponent_attack_damage) {
+                            health.0 = h;
+                        } else {
+                            health.0 = 0;
+                        }
+                        health_update_events.send(HealthUpdateEvent::new(*player, health.0));
+                    }
+                }
+            }
+            State::HPunching => {
+                if opponent_current_frame == opponent_attack_frame {
+                    if collide(
+                        opponent_attack_box_pos,
+                        opponent_attack_box_size,
+                        collider_box_pos,
+                        collider_box_size,
+                    )
+                    .is_some()
+                    {
+                        // Switch state to TakingHit.
+                        previous_state.set_state(current_state.0);
+                        current_state.set_state(State::TakingHit);
+
+                        // Just in case damage is not a nice divisior of MAX_HEALTH.
+                        if let Some(h) = health.0.checked_sub(opponent_attack_damage) {
+                            health.0 = h;
+                        } else {
+                            health.0 = 0;
+                        }
+                        health_update_events.send(HealthUpdateEvent::new(*player, health.0));
+                    }
+                }
+            }
+            State::LKicking => {
+                if opponent_current_frame == opponent_attack_frame {
+                    if collide(
+                        opponent_attack_box_pos,
+                        opponent_attack_box_size,
+                        collider_box_pos,
+                        collider_box_size,
+                    )
+                    .is_some()
+                    {
+                        // Switch state to TakingHit.
+                        previous_state.set_state(current_state.0);
+                        current_state.set_state(State::TakingHit);
+
+                        // Just in case damage is not a nice divisior of MAX_HEALTH.
+                        if let Some(h) = health.0.checked_sub(opponent_attack_damage) {
+                            health.0 = h;
+                        } else {
+                            health.0 = 0;
+                        }
+                        health_update_events.send(HealthUpdateEvent::new(*player, health.0));
+                    }
+                }
+            }
+            State::HKicking => {
                 if opponent_current_frame == opponent_attack_frame {
                     if collide(
                         opponent_attack_box_pos,
