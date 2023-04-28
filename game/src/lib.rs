@@ -37,8 +37,9 @@ pub fn run() {
                 .set(WindowPlugin {
                     window: WindowDescriptor {
                         title: "Approaching Storms".to_string(),
-                        width: WINDOW_WIDTH,
-                        height: WINDOW_HEIGHT,
+                        //width: WINDOW_WIDTH,
+                        //height: WINDOW_HEIGHT,
+                        fit_canvas_to_parent: true,
                         present_mode: PresentMode::AutoNoVsync,
                         ..default()
                     },

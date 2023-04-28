@@ -92,7 +92,7 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) {
                 style: Style {
                     size: Size::new(Val::Percent(100.0), Val::Percent(10.0)),
                     position: UiRect {
-                        top: Val::Px(35.0),
+                        top: Val::Px(100.0), //35
                         left: Val::Px(0.0),
                         ..default()
                     },
