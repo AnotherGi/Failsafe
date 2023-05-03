@@ -87,6 +87,9 @@ struct GameAssets {
     #[asset(path = "images/escape_key.png")]
     pub(crate) escape_key_image: Handle<Image>,
 
+    #[asset(path = "images/Title_Screen_Reference_Crude.png")]
+    pub(crate) title_screen_image: Handle<Image>,
+
     #[asset(path = "audio/sword sound.wav")]
     pub(crate) player_one_attack_audio: Handle<AudioSource>,
 
@@ -104,6 +107,7 @@ struct GameAssets {
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 enum GameState {
     AssetLoading,
+    //MatchMaking
     MainMenu,
     InGame,
     GameOver,

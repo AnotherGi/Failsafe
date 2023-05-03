@@ -2,7 +2,7 @@
 
 use crate::{
     menu_background, menu_border, menu_button, menu_button_interaction_system, menu_button_text,
-    menu_root, GameAssets, GameState,
+    menu_root, title_screen, GameAssets, GameState,
 };
 use bevy::{app::AppExit, prelude::*};
 //use bevy_kira_audio::prelude::*;
@@ -39,10 +39,30 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
 
     let mut entities: Vec<Entity> = Vec::new();
 
+/* 
+    commands.spawn(ImageBundle {
+        image: UiImage(assets.title_screen_image.clone()),
+        transform: Transform::from_scale(Vec3::new(
+            0.58, 0.58, 0.58,
+        )),
+        ..default()
+    });
+*/
+
+
     entities.push(
         commands
             .spawn(menu_root())
             .with_children(|parent| {
+                parent
+                            .spawn(title_screen())
+                            .with_children(|parent| {
+                                parent.spawn(ImageBundle {
+                                    image: UiImage(assets.title_screen_image.clone()),
+                                    transform: Transform::from_scale(Vec3::new(4.0, 4.0, 4.0,)),
+                                    ..default()
+                                });
+                            });
                 // left vertical fill (border)
                 parent.spawn(menu_border()).with_children(|parent| {
                     // left vertical fill (content)
@@ -76,10 +96,13 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
                                 });
                             })
                             .insert(MenuButton::Play);
-                    });
+                        
+                    }
+                );
                 });
             })
             .id(),
+            
     );
 
     commands.insert_resource(EntityData { entities });

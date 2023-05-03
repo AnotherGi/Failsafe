@@ -83,6 +83,21 @@ pub(crate) fn menu_background() -> NodeBundle {
     }
 }
 
+/// Setup menu background.
+pub(crate) fn title_screen() -> NodeBundle {
+    NodeBundle {
+        style: Style {
+            size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
+            align_items: AlignItems::Center,
+            justify_content: JustifyContent::Center,
+            flex_direction: FlexDirection::ColumnReverse,
+            padding: UiRect::all(Val::Px(5.0)),
+            ..default()
+        },
+        ..default()
+    }
+}
+
 /// Create a button.
 pub(crate) fn menu_button() -> ButtonBundle {
     ButtonBundle {
