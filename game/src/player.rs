@@ -28,14 +28,14 @@ const COLLIDER_ALPHA: f32 = 0.5;
 const MAX_HEALTH: u8 = 100;
 
 /// Animation frame used to determine collisions a player's attack.
-const ATTACK_FRAMES: [usize; 2] = [4, 2];
+const ATTACK_FRAMES: [usize; 2] = [2, 2]; //4, 2
 
 /// Animation frame used to determine audio for attack.
 //const ATTACK_AUDIO_FRAMES: [usize; 2] = [3, 3];
 
 /// Attack damage of player. Player one has slow powerful attack while player two has quick weaker
 /// attack (based on number of frames of animation).
-const ATTACK_DAMAGES: [u8; 2] = [10_u8, 8_u8];
+const ATTACK_DAMAGES: [u8; 2] = [5_u8, 5_u8]; //10, 8
 
 lazy_static! {
     /// Frame ranges for player states (min, max).
@@ -213,6 +213,15 @@ struct ColliderBox;
 #[derive(Component)]
 struct AttackBox;
 
+#[derive(Component)]
+struct HPAttackBox;
+
+#[derive(Component)]
+struct LKAttackBox;
+
+#[derive(Component)]
+struct HKAttackBox;
+
 /// Represents the current sprite index (used for determining collision).
 #[derive(Component, Deref, DerefMut)]
 struct CurrentFrame(usize);
@@ -263,10 +272,22 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
         },
         Vec3::new(-10.0, 0.0, PLAYER_Z + 0.02),
         Vec3::new(100.0, 250.0, 1.0) * PLAYER_SCALE,
-        Color::rgba(1.0, 0.0, 0.0, COLLIDER_ALPHA),
+        Color::rgba(0.0, 0.0, 1.0, COLLIDER_ALPHA),
+        //lp hitbox
         Vec3::new(35.0, 50.0, PLAYER_Z + 0.03), //125.0, 35.0 | 145.0, 56.0
         Vec3::new(90.0, 45.0, 1.0) * PLAYER_SCALE, //75.0, 25.0
-        Color::rgba(1.0, 1.0, 0.0, COLLIDER_ALPHA),
+        Color::rgba(1.0, 0.0, 0.0, COLLIDER_ALPHA),
+        // hp hitbox
+        Vec3::new(35.0, 50.0, PLAYER_Z + 0.03),
+        Vec3::new(90.0, 45.0, 1.0) * PLAYER_SCALE,
+        //lk hitbox
+        Vec3::new(35.0, 50.0, PLAYER_Z + 0.03),
+        Vec3::new(90.0, 45.0, 1.0) * PLAYER_SCALE,
+        //hk hitbox
+        Vec3::new(35.0, 50.0, PLAYER_Z + 0.03),
+        Vec3::new(90.0, 45.0, 1.0) * PLAYER_SCALE,
+        // dummy color used to make individual hitboxes invisible
+        Color::rgba(0.0, 0.0, 0.0, 0.0),
     ));
 
     // Player 2: Adjust player feet. (Height=200, y-feet=128 => y-center=100 => y-offset=28).
@@ -292,10 +313,22 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) { //audio: Res<Audio>
         },
         Vec3::new(10.0, 0.0, PLAYER_Z + 0.02),
         Vec3::new(100.0, 250.0, 1.0) * PLAYER_SCALE,
-        Color::rgba(0.0, 1.0, 0.0, COLLIDER_ALPHA),
+        Color::rgba(0.0, 0.0, 1.0, COLLIDER_ALPHA),
+        //lp hitbox
         Vec3::new(-35.0, 50.0, PLAYER_Z + 0.03),
         Vec3::new(90.0, 45.0, 1.0) * PLAYER_SCALE,
-        Color::rgba(1.0, 0.0, 1.0, COLLIDER_ALPHA),
+        Color::rgba(1.0, 0.0, 0.0, COLLIDER_ALPHA),
+        // hp hitbox
+        Vec3::new(-35.0, 50.0, PLAYER_Z + 0.03),
+        Vec3::new(90.0, 45.0, 1.0) * PLAYER_SCALE,
+        //lk hitbox
+        Vec3::new(-35.0, 50.0, PLAYER_Z + 0.03),
+        Vec3::new(90.0, 45.0, 1.0) * PLAYER_SCALE,
+        //hk hitbox
+        Vec3::new(-35.0, 50.0, PLAYER_Z + 0.03),
+        Vec3::new(90.0, 45.0, 1.0) * PLAYER_SCALE,
+        // dummy color used to make individual hitboxes invisible
+        Color::rgba(0.0, 0.0, 0.0, 0.0),
     ));
 
     commands.insert_resource(EntityData { entities });
@@ -314,6 +347,13 @@ fn spawn_player(
     attack_box_pos: Vec3,
     attack_box_size: Vec3,
     attack_box_color: Color,
+    hp_attack_box_pos: Vec3,
+    hp_attack_box_size: Vec3,
+    lk_attack_box_pos: Vec3,
+    lk_attack_box_size: Vec3,
+    hk_attack_box_pos: Vec3,
+    hk_attack_box_size: Vec3,
+    debug_invis: Color,
 ) -> Entity {
     let player_atlas_handle = match player {
         Player::One => assets.player_one_texture_atlas.clone(),
@@ -381,7 +421,7 @@ fn spawn_player(
                 .insert(GroundY(attack_box_pos.y))
                 .insert(SpriteBundle {
                     sprite: Sprite {
-                        color: attack_box_color,
+                        color: debug_invis,
                         ..default()
                     },
                     transform: Transform {
@@ -391,6 +431,54 @@ fn spawn_player(
                     },
                     ..default()
                 });
+
+            player
+            .spawn(HPAttackBox)
+            .insert(GroundY(hp_attack_box_pos.y))
+            .insert(SpriteBundle {
+                sprite: Sprite {
+                    color: attack_box_color,
+                    ..default()
+                },
+                transform: Transform {
+                    translation: hp_attack_box_pos,
+                    scale: hp_attack_box_size,
+                    ..default()
+                },
+                ..default()
+            });
+
+            player
+            .spawn(LKAttackBox)
+            .insert(GroundY(lk_attack_box_pos.y))
+            .insert(SpriteBundle {
+                sprite: Sprite {
+                    color: debug_invis,
+                    ..default()
+                },
+                transform: Transform {
+                    translation: lk_attack_box_pos,
+                    scale: lk_attack_box_size,
+                    ..default()
+                },
+                ..default()
+            });
+
+            player
+            .spawn(HKAttackBox)
+            .insert(GroundY(hk_attack_box_pos.y))
+            .insert(SpriteBundle {
+                sprite: Sprite {
+                    color: debug_invis,
+                    ..default()
+                },
+                transform: Transform {
+                    translation: hk_attack_box_pos,
+                    scale: hk_attack_box_size,
+                    ..default()
+                },
+                ..default()
+            });
         })
         .id()
 }
@@ -443,7 +531,7 @@ fn game_play_input_system(
         if keyboard_input.pressed(keys.attack) {
             // If player is either attacking already or taking a hit don't allow an attack.
             match current_state.0 {
-                State::Attacking | State::TakingHit => (),
+                State::Attacking | State::LPunching | State::HPunching | State::LKicking | State::HKicking | State::TakingHit => (),
                 _ => {
                     previous_state.set_from_current(&current_state);
                     current_state.set_state(State::Attacking);
@@ -454,7 +542,7 @@ fn game_play_input_system(
         if keyboard_input.pressed(keys.lpunch) {
             // If player is either attacking already or taking a hit don't allow an attack.
             match current_state.0 {
-                State::LPunching | State::TakingHit => (),
+                State::Attacking | State::LPunching | State::HPunching | State::LKicking | State::HKicking | State::TakingHit => (),
                 _ => {
                     previous_state.set_from_current(&current_state);
                     current_state.set_state(State::LPunching);
@@ -465,7 +553,7 @@ fn game_play_input_system(
         if keyboard_input.pressed(keys.hpunch) {
             // If player is either attacking already or taking a hit don't allow an attack.
             match current_state.0 {
-                State::HPunching | State::TakingHit => (),
+                State::Attacking | State::LPunching | State::HPunching | State::LKicking | State::HKicking | State::TakingHit => (),
                 _ => {
                     previous_state.set_from_current(&current_state);
                     current_state.set_state(State::HPunching);
@@ -476,7 +564,7 @@ fn game_play_input_system(
         if keyboard_input.pressed(keys.lkick) {
             // If player is either attacking already or taking a hit don't allow an attack.
             match current_state.0 {
-                State::LKicking | State::TakingHit => (),
+                State::Attacking | State::LPunching | State::HPunching | State::LKicking | State::HKicking | State::TakingHit => (),
                 _ => {
                     previous_state.set_from_current(&current_state);
                     current_state.set_state(State::LKicking);
@@ -487,7 +575,7 @@ fn game_play_input_system(
         if keyboard_input.pressed(keys.hkick) {
             // If player is either attacking already or taking a hit don't allow an attack.
             match current_state.0 {
-                State::HKicking | State::TakingHit => (),
+                State::Attacking | State::LPunching | State::HPunching | State::LKicking | State::HKicking | State::TakingHit => (),
                 _ => {
                     previous_state.set_from_current(&current_state);
                     current_state.set_state(State::HKicking);
@@ -587,6 +675,27 @@ fn movement_system(
                     current_state.set_from_previous(previous_state);
                 }
             }
+            State::HPunching => {
+                // Let player finish attacking.
+                let max_frame = FRAMES[player.index()].get(&State::HPunching).unwrap().1;
+                if current_frame.0 == max_frame {
+                    current_state.set_from_previous(previous_state);
+                }
+            }
+            State::LKicking => {
+                // Let player finish attacking.
+                let max_frame = FRAMES[player.index()].get(&State::LKicking).unwrap().1;
+                if current_frame.0 == max_frame {
+                    current_state.set_from_previous(previous_state);
+                }
+            }
+            State::HKicking => {
+                // Let player finish attacking.
+                let max_frame = FRAMES[player.index()].get(&State::HKicking).unwrap().1;
+                if current_frame.0 == max_frame {
+                    current_state.set_from_previous(previous_state);
+                }
+            }
             State::TakingHit => {
                 // Let player finish taking hit.
                 let max_frame = FRAMES[player.index()].get(&State::TakingHit).unwrap().1;
@@ -646,6 +755,9 @@ fn collision_system(
     )>,
     collider_box_query: Query<(&Parent, &GlobalTransform, &Transform), With<ColliderBox>>,
     attack_box_query: Query<(&Parent, &GlobalTransform, &Transform), With<AttackBox>>,
+    hp_attack_box_query: Query<(&Parent, &GlobalTransform, &Transform), With<HPAttackBox>>,
+    lk_attack_box_query: Query<(&Parent, &GlobalTransform, &Transform), With<LKAttackBox>>,
+    hk_attack_box_query: Query<(&Parent, &GlobalTransform, &Transform), With<HKAttackBox>>,
     mut health_update_events: EventWriter<HealthUpdateEvent>,
 ) {
     // Since we need to check one player's collider with the opponent's attack_box we need to
@@ -667,6 +779,24 @@ fn collision_system(
         attack_boxes[player.index()] = (gt.translation(), t.scale.truncate());
     }
 
+    let mut hp_attack_boxes = [(Vec3::default(), Vec2::default()); 2];
+    for (parent, gt, t) in &hp_attack_box_query {
+        let (player, _, _, _, _) = player_query.get(parent.get()).unwrap();
+        hp_attack_boxes[player.index()] = (gt.translation(), t.scale.truncate());
+    }
+
+    let mut lk_attack_boxes = [(Vec3::default(), Vec2::default()); 2];
+    for (parent, gt, t) in &lk_attack_box_query {
+        let (player, _, _, _, _) = player_query.get(parent.get()).unwrap();
+        lk_attack_boxes[player.index()] = (gt.translation(), t.scale.truncate());
+    }
+
+    let mut hk_attack_boxes = [(Vec3::default(), Vec2::default()); 2];
+    for (parent, gt, t) in &hk_attack_box_query {
+        let (player, _, _, _, _) = player_query.get(parent.get()).unwrap();
+        hk_attack_boxes[player.index()] = (gt.translation(), t.scale.truncate());
+    }
+
     // Check collision detection.
     for (player, mut current_state, mut previous_state, _current_frame, mut health) in
         &mut player_query
@@ -682,6 +812,9 @@ fn collision_system(
         let (opponent_current_state, _opponent_previous_state, opponent_current_frame) =
             players[opponent];
         let (opponent_attack_box_pos, opponent_attack_box_size) = attack_boxes[opponent];
+        let (opponent_hp_attack_box_pos, opponent_hp_attack_box_size) = hp_attack_boxes[opponent];
+        let (opponent_lk_attack_box_pos, opponent_lk_attack_box_size) = lk_attack_boxes[opponent];
+        let (opponent_hk_attack_box_pos, opponent_hk_attack_box_size) = hk_attack_boxes[opponent];
         let opponent_attack_damage = ATTACK_DAMAGES[opponent];
 
         match opponent_current_state {
@@ -736,8 +869,8 @@ fn collision_system(
             State::HPunching => {
                 if opponent_current_frame == opponent_attack_frame {
                     if collide(
-                        opponent_attack_box_pos,
-                        opponent_attack_box_size,
+                        opponent_hp_attack_box_pos,
+                        opponent_hp_attack_box_size,
                         collider_box_pos,
                         collider_box_size,
                     )
@@ -760,8 +893,8 @@ fn collision_system(
             State::LKicking => {
                 if opponent_current_frame == opponent_attack_frame {
                     if collide(
-                        opponent_attack_box_pos,
-                        opponent_attack_box_size,
+                        opponent_lk_attack_box_pos,
+                        opponent_lk_attack_box_size,
                         collider_box_pos,
                         collider_box_size,
                     )
@@ -784,8 +917,8 @@ fn collision_system(
             State::HKicking => {
                 if opponent_current_frame == opponent_attack_frame {
                     if collide(
-                        opponent_attack_box_pos,
-                        opponent_attack_box_size,
+                        opponent_hk_attack_box_pos,
+                        opponent_hk_attack_box_size,
                         collider_box_pos,
                         collider_box_size,
                     )
