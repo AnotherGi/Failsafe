@@ -73,12 +73,12 @@ struct GameAssets {
     #[asset(path = "images/shop_anim.png")]
     pub(crate) shop_texture_atlas: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 384.0, tile_size_y = 224.0, columns = 6, rows = 7))] //2304.0, 1568.0
-    #[asset(path = "images/Jerry_Crude_Sprites_Sheet_p1.png")]
+    #[asset(texture_atlas(tile_size_x = 384.0, tile_size_y = 224.0, columns = 6, rows = 10))] //2304.0, 1568.0 //6, 7
+    #[asset(path = "images/Jerry_Crude_Sprites_p1.png")]
     pub(crate) player_one_texture_atlas: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 384.0, tile_size_y = 224.0, columns = 6, rows = 7))] //2304.0, 1344.0
-    #[asset(path = "images/Jerry_Crude_Sprites_Sheet_p2.png")]
+    #[asset(texture_atlas(tile_size_x = 384.0, tile_size_y = 224.0, columns = 6, rows = 10))] //2304.0, 1344.0 //6, 7
+    #[asset(path = "images/Jerry_Crude_Sprites_p2.png")]
     pub(crate) player_two_texture_atlas: Handle<TextureAtlas>,
 
     #[asset(path = "images/return_key.png")]

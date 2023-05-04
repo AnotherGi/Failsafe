@@ -41,38 +41,38 @@ lazy_static! {
     /// Frame ranges for player states (min, max).
     static ref FRAMES: [HashMap<State, (usize, usize)>; 2] = {
         let mut p1 = HashMap::new();
-        p1.insert(State::Attacking, (0, 4));
-        p1.insert(State::Dying, (6, 10));
-        p1.insert(State::Falling, (25, 26));
-        p1.insert(State::Idling, (32, 34)); //32, 39 //36, 40
-        p1.insert(State::Jumping, (25, 26));
-        p1.insert(State::Running, (18, 23));
-        p1.insert(State::TakingHit, (12, 14));
-        p1.insert(State::LPunching, (0, 4));
-        p1.insert(State::HPunching, (0, 4));
-        p1.insert(State::LKicking, (0, 4));
-        p1.insert(State::HKicking, (0, 4));
-        //p1.insert(State::AirLPunching, (0, 5));
-        //p1.insert(State::AirHPunching, (0, 5));
-        //p1.insert(State::AirLKicking, (0, 5));
-        //p1.insert(State::AirHKicking, (0, 5));
+        p1.insert(State::Attacking, (18, 22)); //0, 4 (sheet) //67, 71 (copy) //18, 22 (sprites)
+        p1.insert(State::Dying, (24, 28)); //6, 10 (sheet) //73, 77 (copy) //24, 28 (sprites)
+        p1.insert(State::Falling, (42, 43)); //25, 26 (sheet) //91, 92 (copy) //42, 43 (sprites)
+        p1.insert(State::Idling, (54, 58)); //32, 34 (sheet) //103, 107 (copy) //54, 58 (sprites)
+        p1.insert(State::Jumping, (42, 43)); //25, 26 (sheet) //91, 92 (copy) //42, 43 (sprites)
+        p1.insert(State::Running, (36, 41)); //18, 23 (sheet) //85, 90 (copy) //36, 41 (sprites)
+        p1.insert(State::TakingHit, (30, 32)); //12, 14 (sheet) //79, 81 (copy) //30, 32 (sprites)
+        p1.insert(State::LPunching, (18, 22)); //0, 4 (sheet) //67, 71 (copy) //18, 22 (sprites)
+        p1.insert(State::HPunching, (12, 16)); //0, 4 (sheet) //61, 65 (copy) //12, 16 (sprites)
+        p1.insert(State::LKicking, (6, 10)); //0, 4 (sheet) //54, 59 (copy) //6, 10 (sprites)
+        p1.insert(State::HKicking, (0, 4)); //0, 4 (sheet) //48, 52 (copy) //0, 4 (sprites)
+        //p1.insert(State::AirLPunching, (0, 5)); //18, 20
+        //p1.insert(State::AirHPunching, (0, 5)); //12, 16
+        //p1.insert(State::AirLKicking, (0, 5)); //6, 8
+        //p1.insert(State::AirHKicking, (0, 5)); //0, 2
 
         let mut p2 = HashMap::new();
-        p2.insert(State::Attacking, (0, 4)); //0, 3 //3 frames
-        p2.insert(State::Dying, (6, 10)); //16, 22 //12 frames
-        p2.insert(State::Falling, (25, 26)); //24, 25 //2 frames
-        p2.insert(State::Idling, (32, 34)); //32, 35 //3 frames
-        p2.insert(State::Jumping, (25, 26)); //40, 41 //2 frames
-        p2.insert(State::Running, (18, 23)); //48, 55 //7 frames
-        p2.insert(State::TakingHit, (12, 14)); //56, 58 //2 frames
-        p2.insert(State::LPunching, (0, 4));
-        p2.insert(State::HPunching, (0, 4));
-        p2.insert(State::LKicking, (0, 4));
-        p2.insert(State::HKicking, (0, 4));
-        //p2.insert(State::AirLPunching, (0, 5));
-        //p2.insert(State::AirHPunching, (0, 5));
-        //p2.insert(State::AirLKicking, (0, 5));
-        //p2.insert(State::AirHKicking, (0, 5));
+        p2.insert(State::Attacking, (18, 22)); //0, 4 (sheet) //67, 71 (copy) //18, 22 (sprites)
+        p2.insert(State::Dying, (24, 28)); //6, 10 (sheet) //73, 77 (copy) //24, 28 (sprites)
+        p2.insert(State::Falling, (42, 43)); //25, 26 (sheet) //91, 92 (copy) //42, 43 (sprites)
+        p2.insert(State::Idling, (54, 58)); //32, 34 (sheet) //103, 107 (copy) //54, 58 (sprites)
+        p2.insert(State::Jumping, (42, 43)); //25, 26 (sheet) //91, 92 (copy) //42, 43 (sprites)
+        p2.insert(State::Running, (36, 41)); //18, 23 (sheet) //85, 90 (copy) //36, 41 (sprites)
+        p2.insert(State::TakingHit, (30, 32)); //12, 14 (sheet) //79, 81 (copy) //30, 32 (sprites)
+        p2.insert(State::LPunching, (18, 22)); //0, 4 (sheet) //67, 71 (copy) //18, 22 (sprites)
+        p2.insert(State::HPunching, (12, 16)); //0, 4 (sheet) //61, 65 (copy) //12, 16 (sprites)
+        p2.insert(State::LKicking, (6, 10)); //0, 4 (sheet) //54, 59 (copy) //6, 10 (sprites)
+        p2.insert(State::HKicking, (0, 4)); //0, 4 (sheet) //48, 52 (copy) //0, 4 (sprites)
+        //p2.insert(State::AirLPunching, (0, 5)); //18, 20
+        //p2.insert(State::AirHPunching, (0, 5)); //12, 16
+        //p2.insert(State::AirLKicking, (0, 5)); //6, 8
+        //p2.insert(State::AirHKicking, (0, 5)); //0, 2
 
         [p1, p2]
     };
