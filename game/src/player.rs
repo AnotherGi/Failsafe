@@ -10,7 +10,7 @@ use std::collections::HashMap;
 const PLAYER_SCALE: f32 = 0.75; //2.75
 
 /// Starting frame for idle animation.
-const IDLE_FRAME_START: usize = 36; //30
+const IDLE_FRAME_START: usize = 54; //30 //36
 
 /// Gravity strength.
 pub(crate) const GRAVITY: f32 = -9.8 * 250.0;
@@ -29,6 +29,9 @@ const MAX_HEALTH: u8 = 100;
 
 /// Animation frame used to determine collisions a player's attack.
 const ATTACK_FRAMES: [usize; 2] = [2, 2]; //4, 2
+const ATTACK_FRAMESHP: [usize; 2] = [14, 14]; //
+const ATTACK_FRAMESLK: [usize; 2] = [8, 8]; //
+const ATTACK_FRAMESLP: [usize; 2] = [20, 20]; //
 
 /// Animation frame used to determine audio for attack.
 //const ATTACK_AUDIO_FRAMES: [usize; 2] = [3, 3];
@@ -809,6 +812,9 @@ fn collision_system(
         let opponent = player.opponent().index();
         let (collider_box_pos, collider_box_size) = collider_boxes[player.index()];
         let opponent_attack_frame = ATTACK_FRAMES[opponent];
+        let opponent_attack_frameHP = ATTACK_FRAMESHP[opponent]; //
+        let opponent_attack_frameLK = ATTACK_FRAMESLK[opponent]; //
+        let opponent_attack_frameLP = ATTACK_FRAMESLP[opponent]; //
         let (opponent_current_state, _opponent_previous_state, opponent_current_frame) =
             players[opponent];
         let (opponent_attack_box_pos, opponent_attack_box_size) = attack_boxes[opponent];
@@ -843,7 +849,7 @@ fn collision_system(
                 }
             }
             State::LPunching => {
-                if opponent_current_frame == opponent_attack_frame {
+                if opponent_current_frame == opponent_attack_frameLP { //LP
                     if collide(
                         opponent_attack_box_pos,
                         opponent_attack_box_size,
@@ -866,8 +872,8 @@ fn collision_system(
                     }
                 }
             }
-            State::HPunching => {
-                if opponent_current_frame == opponent_attack_frame {
+            State::HPunching => { //HP
+                if opponent_current_frame == opponent_attack_frameHP {
                     if collide(
                         opponent_hp_attack_box_pos,
                         opponent_hp_attack_box_size,
@@ -890,8 +896,8 @@ fn collision_system(
                     }
                 }
             }
-            State::LKicking => {
-                if opponent_current_frame == opponent_attack_frame {
+            State::LKicking => { //LK
+                if opponent_current_frame == opponent_attack_frameLK {
                     if collide(
                         opponent_lk_attack_box_pos,
                         opponent_lk_attack_box_size,
