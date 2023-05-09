@@ -63,54 +63,9 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) {
             })
             .id(),
     );
-
-/* 
-    // Animated shop sprite.
-    entities.push(
-        commands
-            .spawn(Shop)
-            .insert(SpriteSheetBundle {
-                texture_atlas: assets.shop_texture_atlas.clone(),
-                transform: Transform {
-                    translation: Vec3::new(280.0, -28.5, BG_Z + 0.01),
-                    scale: Vec3::new(SHOP_SCALE, SHOP_SCALE, 1.0),
-                    ..default()
-                },
-                ..default()
-            })
-            .insert(AnimationTimer(Timer::from_seconds(
-                0.1,
-                TimerMode::Repeating,
-            )))
-            .id(),
-    );
-*/
     commands.insert_resource(EntityData { entities });
 }
 
-/* 
-/// Animate the shop sprite.
-fn animation_system(
-    time: Res<Time>,
-    texture_atlases: Res<Assets<TextureAtlas>>,
-    mut query: Query<
-        (
-            &mut AnimationTimer,
-            &mut TextureAtlasSprite,
-            &Handle<TextureAtlas>,
-        ),
-        With<Shop>,
-    >,
-) {
-    for (mut timer, mut sprite, texture_atlas_handle) in &mut query {
-        timer.tick(time.delta());
-        if timer.just_finished() {
-            let texture_atlas = texture_atlases.get(texture_atlas_handle).unwrap();
-            sprite.index = (sprite.index + 1) % texture_atlas.textures.len();
-        }
-    }
-}
-*/
 /// Cleanup resources.
 fn cleanup(mut commands: Commands, entity_data: Res<EntityData>) {
     for entity in entity_data.entities.iter() {

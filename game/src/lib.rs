@@ -69,10 +69,6 @@ struct GameAssets {
     #[asset(path = "images/background_composite.png")]
     pub(crate) background_image: Handle<Image>,
 
-    #[asset(texture_atlas(tile_size_x = 118.0, tile_size_y = 128.0, columns = 15, rows = 1))]
-    #[asset(path = "images/shop_anim.png")]
-    pub(crate) shop_texture_atlas: Handle<TextureAtlas>,
-
     #[asset(texture_atlas(tile_size_x = 384.0, tile_size_y = 224.0, columns = 6, rows = 10))] //2304.0, 1568.0 //6, 7
     #[asset(path = "images/Jerry_Crude_Sprites_p1.png")]
     pub(crate) player_one_texture_atlas: Handle<TextureAtlas>,
@@ -89,18 +85,6 @@ struct GameAssets {
 
     #[asset(path = "images/Title_Screen_Reference_Crude.png")]
     pub(crate) title_screen_image: Handle<Image>,
-
-    #[asset(path = "audio/sword sound.wav")]
-    pub(crate) player_one_attack_audio: Handle<AudioSource>,
-
-    #[asset(path = "audio/melee sound.wav")]
-    pub(crate) player_two_attack_audio: Handle<AudioSource>,
-
-    #[asset(path = "audio/Adventure Theme Intro.wav")]
-    pub(crate) main_menu_audio: Handle<AudioSource>,
-
-    #[asset(path = "audio/Boss Battle 6 Metal V1.wav")]
-    pub(crate) in_game_audio: Handle<AudioSource>,
 }
 
 /// Game states.
