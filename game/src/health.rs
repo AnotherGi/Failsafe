@@ -161,6 +161,3 @@ fn cleanup(mut commands: Commands, entity_data: Res<EntityData>) {
         commands.entity(*entity).despawn_recursive();
     }
 }
-
-// Scaling factor for shop sprite.
-//const SHOP_SCALE: f32 = 2.85;
