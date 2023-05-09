@@ -28,16 +28,20 @@ const COLLIDER_ALPHA: f32 = 0.5;
 const MAX_HEALTH: u8 = 100;
 
 /// Animation frame used to determine collisions a player's attack.
-const ATTACK_FRAMES_LP: [usize; 2] = [20, 20]; //
-const ATTACK_FRAMES_HP: [usize; 2] = [14, 14]; //
-const ATTACK_FRAMES_LK: [usize; 2] = [8, 8]; //
-const ATTACK_FRAMES_HK: [usize; 2] = [2, 2]; //4, 2
+const ATTACK_FRAMES_LP: [usize; 2] = [21, 18]; //
+const ATTACK_FRAMES_HP: [usize; 2] = [15, 14]; //
+const ATTACK_FRAMES_LK: [usize; 2] = [8, 7]; //
+const ATTACK_FRAMES_HK: [usize; 2] = [3, 2]; //4, 2
 
 /// Animation frame used to determine audio for attack.
 //const ATTACK_AUDIO_FRAMES: [usize; 2] = [3, 3];
 
 /// Attack damage of player
-const ATTACK_DAMAGES: [u8; 2] = [5_u8, 5_u8]; //10, 8
+//const ATTACK_DAMAGES: [u8; 2] = [10_u8, 8_u8]; //5, 5
+const ATTACK_DAMAGESLP: [u8; 2] = [5_u8, 2_u8]; //
+const ATTACK_DAMAGESHP: [u8; 2] = [10_u8, 8_u8]; //
+const ATTACK_DAMAGESLK: [u8; 2] = [6_u8, 5_u8]; //
+const ATTACK_DAMAGESHK: [u8; 2] = [11_u8, 9_u8]; //
 
 lazy_static! {
     /// Frame ranges for player states (min, max).
@@ -834,7 +838,11 @@ fn collision_system(
         let (opponent_hp_attack_box_pos, opponent_hp_attack_box_size) = hp_attack_boxes[opponent];
         let (opponent_lk_attack_box_pos, opponent_lk_attack_box_size) = lk_attack_boxes[opponent];
         let (opponent_hk_attack_box_pos, opponent_hk_attack_box_size) = hk_attack_boxes[opponent];
-        let opponent_attack_damage = ATTACK_DAMAGES[opponent];
+        //let opponent_attack_damage = ATTACK_DAMAGES[opponent];
+        let opponent_attack_damage_lp = ATTACK_DAMAGESLP[opponent]; //
+        let opponent_attack_damage_hp = ATTACK_DAMAGESHP[opponent]; //
+        let opponent_attack_damage_lk = ATTACK_DAMAGESLK[opponent]; //
+        let opponent_attack_damage_hk = ATTACK_DAMAGESHK[opponent]; //
 
         match opponent_current_state {
             State::LPunching => {
@@ -852,7 +860,7 @@ fn collision_system(
                         current_state.set_state(State::TakingHit);
 
                         // Just in case damage is not a nice divisior of MAX_HEALTH.
-                        if let Some(h) = health.0.checked_sub(opponent_attack_damage) {
+                        if let Some(h) = health.0.checked_sub(opponent_attack_damage_lp) { //LP//
                             health.0 = h;
                         } else {
                             health.0 = 0;
@@ -876,7 +884,7 @@ fn collision_system(
                         current_state.set_state(State::TakingHit);
 
                         // Just in case damage is not a nice divisior of MAX_HEALTH.
-                        if let Some(h) = health.0.checked_sub(opponent_attack_damage) {
+                        if let Some(h) = health.0.checked_sub(opponent_attack_damage_hp) { //HP//
                             health.0 = h;
                         } else {
                             health.0 = 0;
@@ -900,7 +908,7 @@ fn collision_system(
                         current_state.set_state(State::TakingHit);
 
                         // Just in case damage is not a nice divisior of MAX_HEALTH.
-                        if let Some(h) = health.0.checked_sub(opponent_attack_damage) {
+                        if let Some(h) = health.0.checked_sub(opponent_attack_damage_lk) { //LK//
                             health.0 = h;
                         } else {
                             health.0 = 0;
@@ -910,7 +918,7 @@ fn collision_system(
                 }
             }
             State::HKicking => {
-                if opponent_current_frame == opponent_attack_frame_hk {
+                if opponent_current_frame == opponent_attack_frame_hk { //HK
                     if collide(
                         opponent_hk_attack_box_pos,
                         opponent_hk_attack_box_size,
@@ -924,7 +932,7 @@ fn collision_system(
                         current_state.set_state(State::TakingHit);
 
                         // Just in case damage is not a nice divisior of MAX_HEALTH.
-                        if let Some(h) = health.0.checked_sub(opponent_attack_damage) {
+                        if let Some(h) = health.0.checked_sub(opponent_attack_damage_hk) { //HK//
                             health.0 = h;
                         } else {
                             health.0 = 0;
